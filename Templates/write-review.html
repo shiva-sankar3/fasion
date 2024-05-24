@@ -1,0 +1,120 @@
+{% extends "customers-home.html" %}
+{% load static %}
+{% block header %}
+<head>
+    <style>
+        .rating {
+            font-size: 30px;
+        }
+        
+        .rating input[type="radio"] {
+            display: none;
+        }
+        
+        .rating label {
+            cursor: pointer;
+            color: #ccc;
+        }
+        
+        .rating input[type="radio"]:checked ~ label,
+        .rating input[type="radio"]:hover ~ label {
+            color: #ffcc00;
+        }
+        
+        /* Reverse the order of stars */
+        .rating {
+            direction: rtl;
+        }
+        
+        .rating label {
+            display: inline-block;
+        }
+        
+        .rating input[type="radio"] {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .rating input[type="radio"] + label {
+            padding-right: 10px; /* Adjust spacing between stars */
+        }
+        
+
+    </style>
+</head>
+
+<div class="container margin_60_35">
+	
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+        
+            <div class="write_review">
+                <h1 style="font-size: 2em;">{{product.product_name}}</h1>
+                <div class="rating_submit">
+                    <div class="form-group">
+                    <label class="d-block font-weight-bold py-4 "  style="font-size: 1.5em;">Overall rating</label>
+                    <div class="rating" >
+                        <input type="radio" id="star5" name="rating" value="5">
+                        <label for="star5">&#9733;</label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">&#9733;</label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">&#9733;</label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">&#9733;</label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1">&#9733;</label>
+                    </div>
+                    
+                    
+                    
+                    </div>
+                </div>
+                <!-- /rating_submit -->
+
+                <div class="form-group">
+                    <label>Your review</label>
+                    <textarea name="leave-review" class="form-control" style="height: 180px;" placeholder="Write your review to help others to shop"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Add your photo (optional)</label>
+                    <div class="fileupload"><input type="file" name="imgupload" accept="image/*"></div>
+                </div>
+                <div class="form-group">
+                    <div class="checkboxes float-left add_bottom_15 add_top_15">
+                        <label class="container_check">Eos tollit ancillae ea, lorem consulatu qui ne, eu eros eirmod scaevola sea. Et nec tantas accusamus salutatus, sit commodo veritus te, erat legere fabulas has ut. Rebum laudem cum ea, ius essent fuisset ut. Viderer petentium cu his.
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+                                                                               
+                   <button type="submit" name="Submit-review" class="inline-block focus:outline-none text-slate-600 hover:bg-brand-500 hover:text-white bg-transparent border border-gray-200 dark:bg-transparent dark:text-slate-400 dark:hover:text-white dark:border-gray-700 dark:hover:bg-brand-500  text-sm font-medium py-2 px-3 rounded" data-bs-toggle="modal" data-bs-target="#exampleModal" >Submit review</button>
+                {% comment %} <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Notification</h1>
+                            </div>
+                            <div class="modal-body">
+                                <p> Do you really want to <span style="color: red;">cancel</span> this order? </p>
+                            </div>
+                            <div class="modal-footer"><button type="button" style="background-color: violet;!importent" class="inline-block focus:outline-none text-white hover:bg-brand-500 hover:text-white bg-brand-500 border border-gray-200 text-sm font-medium py-1 px-3 rounded" data-bs-dismiss="modal">NO</button>
+                            </div>
+                        
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+            </div>
+            </form>
+        </div>
+</div>
+<!-- /row -->
+</div>
+
+
+</script>
+
+{% endblock %} 

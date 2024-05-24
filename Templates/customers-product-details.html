@@ -1,0 +1,348 @@
+{% extends "customers-home.html" %}
+{% load static %}
+{% block header %}
+
+
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+
+<div class="container">
+    <div class="ltr:flex flex-1 rtl:flex-row-reverse">
+    <div class="page-wrapper relative  duration-300 pt-0 w-full">
+      <div class="xl:w-full  min-h-[calc(100vh-0px)] relative pb-0">
+        <div class="container my-4">
+          
+
+          <div class="grid md:grid-cols-12 lg:grid-cols-12 xl:grid-cols-12 gap-4 mb-4">
+            <div class="sm:col-span-12  md:col-span-12 lg:col-span-12 xl:col-span-12 ">
+              <div
+                class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-slate-700/40  rounded-md w-full relative">
+                <div class="border-b border-slate-200 dark:border-slate-700/40 py-3 px-4 dark:text-slate-300/70">
+                  <h4 class="font-medium">Title</h4>
+                  <div class="text-center "> 
+                    {% for msg in messages %}
+                    <div class="alert alert-success" role="alert">
+                        {{msg}}
+                      </div>
+                    {% endfor %}
+                </div>
+                </div><!--end header-title-->
+                <div class="flex-auto p-4">
+                  <div class="float-end me-4  ">
+                    {% comment %} <form action="" method="post">
+                      {% csrf_token %}
+                    
+                      <button name="whishlist" type="submit"><i style="color: rgb(91 33 182);" class="fs-5 fa fa-heart " class=" bg-indigo-700"></i></button>
+                    </form> {% endcomment %}
+
+                    {% if wish %}
+
+                    <a href="{% url 'delete-wishlist' data.id %}" >
+                      <i  style="z-index: 2; position:absolute; right:15px;color: red;" class="fs-5  heartfor float-end mt-4  fa fa-heart"></i>
+                      </a>   
+                      {% else %}
+                      <a href="{% url 'add-wishlist' data.id %}">
+                        <i  style=" position:absolute; right:15px; color: gray;" class="fs-5  heartfor float-end mt-4  fa fa-heart"></i>
+                        </a>
+                        {% endif %}
+
+                  </div>
+                  <div class="grid md:grid-cols-12 lg:grid-cols-12 xl:grid-cols-12 gap-4">
+                    <div class="sm:col-span-12  md:col-span-12 lg:col-span-6 xl:col-span-6 text-center">
+                      <div id="img-container" class="text-center inline-block mx-auto">
+                        <img src="/static/media/{{data.product_image}}" alt="" class="inline-block" height="300px" width="300px">
+                      </div>
+                    </div>
+                    <div class="sm:col-span-12  md:col-span-12 lg:col-span-6 xl:col-span-6 self-center">
+                      <span
+                        class="bg-green-600/5 text-green-500 text-[14px] uppercase  font-medium px-2.5 py-0.5 rounded h-5">{{data.product_brand}}</span>
+                      <div class="">
+                        <h5 class="dark:text-slate-200 font-medium text-[30px] leading-9 mt-4">{{data.product_name}}</h5>
+
+                        {% comment %} <p tabindex="0" class="focus:outline-none text-primary-500 dark:text-gray-400 text-base font-medium">Morden and good look model 2023.</p> {% endcomment %}
+                        <ul class="mb-4">
+                            <li class="inline-block">
+                                <i class="icofont-star text-xl text-yellow-400 inline-block"></i>
+                            </li>
+
+                            <li class="inline-block">
+                              <span style="color:#ffcc00;" class="fa fa-star"></span>
+                              <span class="text-gray-700 dark:text-gray-400 text-sm font-medium">{{totalrate}} ( {{total}} )</span>
+                            </li>
+                        </ul>
+                        <h6 class="text-[28px] text-slate-700 dark:text-slate-300 font-semibold mb-1">${{offer_prince}}
+                            <span class="text-base text-slate-400 font-semibold"><del>${{data.product_price}}</del></span>
+                            <span class="text-red-500 text-base font-semibold ml-2">{{offer}}% Off</span>
+                        </h6>
+                       <p><h class="dark:text-slate-200 font-medium text-[18px] leading-9 ">size- <span class="text-[16px] text-red-500 font-semibold">{{data.product_size}}</span></h2></p>
+
+
+                        {% if no_of_item > 0 %}
+                        <span class="bg-green-600/5 text-green-600 text-[11px] font-medium px-2.5 py-0.5 rounded h-5">In stock</span>
+
+                        {% else %}
+
+                        <h2 style="color: red;">
+                          <span class="bg-red-600/5 text-red-600 text-[11px] font-medium px-2.5 py-0.5 rounded h-5">Out of stock</span>
+                        </h2>
+                        <h4 class="mb-2  ">
+                          This item is currently out of stock
+                          {% endif %}
+                        </h4>
+                        <h6 class="text-sm font-medium text-slate-800 dark:text-slate-400">Detail :</h6>
+                        <p class="focus:outline-none text-gray-500 dark:text-gray-400 text-sm font-medium mb-4">
+                          {{data.product_desc}}
+                        </p>
+
+                        
+                          <form method="POST">
+                            {% csrf_token %}
+                        <input name="qty" class="form-input border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent  rounded-md mt-1 border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-0 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-brand-500  dark:hover:border-slate-700"
+                          style="width:100px;" type="number" min="0" value="1" id="example-number-input">
+                            {% if user.is_authenticated %}
+                            <button type="submit" name="cart-btn" class="inline-block focus:outline-none text-slate-600 hover:bg-brand-500 hover:text-white bg-transparent border border-gray-200 dark:bg-transparent dark:text-slate-400 dark:hover:text-white dark:border-gray-700 dark:hover:bg-brand-500  text-sm font-medium py-2 px-3 rounded" >Add to cart</button>
+                            <button type="submit" style="" name="checkout-btn"  class="inline-block focus:outline-none text-slate-600 hover:bg-brand-500 hover:text-white bg-transparent border border-gray-200 dark:bg-transparent dark:text-slate-400 dark:hover:text-white dark:border-gray-700 dark:hover:bg-brand-500  text-sm font-medium py-2 px-3 rounded">checkout</button>
+                            {% else %}
+                            <button type="submit" name="cart-btn" class="inline-block focus:outline-none text-slate-600 hover:bg-brand-500 hover:text-white bg-transparent border border-gray-200 dark:bg-transparent dark:text-slate-400 dark:hover:text-white dark:border-gray-700 dark:hover:bg-brand-500  text-sm font-medium py-2 px-3 rounded" disabled>Add to cart</button>
+                            <button type="submit" style="" name="checkout-btn"  class="inline-block focus:outline-none text-slate-600 hover:bg-brand-500 hover:text-white bg-transparent border border-gray-200 dark:bg-transparent dark:text-slate-400 dark:hover:text-white dark:border-gray-700 dark:hover:bg-brand-500  text-sm font-medium py-2 px-3 rounded" disabled >checkout</button>
+                            {% endif %}
+                            </form>
+                      </div>
+                    </div>
+                  </div>
+                </div><!--end card-body-->
+              </div> <!--end card-->
+            </div><!--end col-->
+          </div><!--end inner-grid-->
+          <div class="grid md:grid-cols-12 lg:grid-cols-12 xl:grid-cols-12 gap-4 mb-4">
+            <div class="sm:col-span-12  md:col-span-12 lg:col-span-12 xl:col-span-12">
+              <div class="w-full relative">
+                <div class="flex-auto ">
+                  <div class="mb-4 border-b border-gray-200 dark:border-slate-700" data-fc-type="tab">
+                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" aria-label="Tabs">
+
+                      <li class="me-2 " role="presentation "> 
+                        <button class="inline-block p-4 rounded-t-lg border-b-2 active" id="additional-tab" data-fc-target="#additional" type="button" role="tab" aria-controls="additional" aria-selected="true">Additional Info</button>
+
+                      </li>
+                      <li class="me-2" role="presentation" >
+                        <button class="inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="reviews-tab" data-fc-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">Ratings & reviews</button>
+                    </li>     
+
+                     
+
+
+                    </ul>
+                  </div>
+                  <div id="myTabContent">
+
+                    <div class="hidden p-4 bg-gray-50 rounded-lg dark:bg-gray-800" id="additional" role="tabpanel"
+                      aria-labelledby="additional-tab">
+                      <div class="grid md:grid-cols-12 lg:grid-cols-12 xl:grid-cols-12 gap-4">
+                        <div class="sm:col-span-12  md:col-span-6 lg:col-span-6 xl:col-span-6 ">
+                          <div class=" w-full relative">
+                            <div class="flex-auto  text-center">
+                              <table class="table border rounded-lg w-full">
+                                <thead>
+                                  <tr>
+                                    <th class="w-[40%]"> </th>
+                                    <th class="w-[60%]"></th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr class="bg-white  border-b border-dashed dark:bg-gray-900 dark:border-gray-700/40">
+                                    <td class="bg-brand-400/5 align-middle border-e border-dashed">
+                                      <h6 class="mb-0 text-slate-800 uppercase font-semibold px-4 text-lg">Arrived Date
+                                      </h6>
+                                    </td>
+                                    <td class="p-4 mb-0">{{data.product_date}}</td>
+                                  </tr>
+                                  <tr class="bg-white border-b border-dashed dark:bg-gray-900 dark:border-gray-700/40">
+                                    <td class="bg-brand-400/5 align-middle border-e border-dashed">
+                                      <h6 class="mb-0 text-slate-800 uppercase font-semibold px-4 text-lg">Category</h6>
+                                    </td>
+                                    <td class="p-4 mb-0">{{data.product_category}}</td>
+                                  </tr>
+                                  <tr class="bg-white border-b border-dashed dark:bg-gray-900 dark:border-gray-700/40">
+                                    <td class="bg-brand-400/5 align-middle border-e border-dashed">
+                                      <h6 class="mb-0 text-slate-800 uppercase font-semibold px-4 text-lg">Color</h6>
+                                    </td>
+                                    <td class="p-4 mb-0"><i class="icofont-brand-mts text-pink-500"></i> {{data.product_color}}</td>
+                                  </tr>
+                                  <tr class="bg-white  border-b border-dashed dark:bg-gray-900 dark:border-gray-700/40">
+                                    <td class="bg-brand-400/5 align-middle border-e border-dashed">
+                                      <h6 class="mb-0 text-slate-800 uppercase font-semibold px-4 text-lg">Made For
+                                      </h6>
+                                    </td>
+                                    <td class="p-4 mb-0">{{data.product_gender}}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div> <!--end card-->
+                        </div><!--end col-->
+
+                      </div><!--end grid-->
+                    </div>
+                                            <div class="hidden p-4 bg-gray-50 rounded-lg dark:bg-gray-800" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                                                <div class=" md:grid-cols-12 lg:grid-cols-12 xl:grid-cols-12 gap-4">
+                                                    <div class="sm:col-span-12  md:col-span-6 lg:col-span-6 xl:col-span-6 ">
+                                                        <div class=" w-full relative">
+                                                            <div class="flex-auto p-4 text-center">
+                                                                <h3 class="my-4 font-semibold text-[34px] dark:text-slate-200">{{totalrate}}</h3>
+                                                                <p class="text-gray-600 font-semibold dark:text-slate-400">Overall Rating</p>
+                                                                <div class="">
+                                                                  <span style="color:#ffcc00;" class="fa fa-star"></span>
+                                                                  <span style="color:#ffcc00;" class="fa fa-star"></span>
+                                                                  <span style="color:#ffcc00;" class="fa fa-star"></span>
+                                                                  <span style="color:#ffcc00;" class="fa fa-star"></span>
+                                                                  <span style="color:#ffcc00;" class="fa fa-star"></span>
+                                                         
+                                                               
+                                                                    <span class="text-slate-800 font-semibold">{{totalrate}} ( {{total}} )</span>
+                                                                </div>
+                                                                <div class="mb-4">
+                                                                    <div class="flex justify-between">
+                                                                        <span class="font-medium text-sm dark:text-slate-400">5 Star</span>
+                                                                        <span class="text-sm font-medium text-slate-500 dark:text-gray-400">{{rate5}}</span>                                                
+                                                                    </div>
+                                                                    <div class="w-full">
+                                                                        <div class="w-full h-[5px] relative bg-gray-200 dark:bg-slate-600/30 rounded-full">
+                                                                            <div class="h-[5px] bg-yellow-400 rounded-full" style="width: {{bar_five}}%"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-4">
+                                                                    <div class="flex justify-between">
+                                                                        <span class="font-medium text-sm dark:text-slate-400">4 Star</span>
+                                                                        <span class="text-sm font-medium text-slate-500 dark:text-gray-400">{{rate4}}</span>                                                
+                                                                    </div>
+                                                                    <div class="w-full">
+                                                                        <div class="w-full h-[5px] relative bg-gray-200 dark:bg-slate-600/30 rounded-full">
+                                                                            <div class="h-[5px] bg-yellow-400 rounded-full" style="width:{{bar_four}}%"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-4">
+                                                                    <div class="flex justify-between">
+                                                                        <span class="font-medium text-sm dark:text-slate-400">3 Star</span>
+                                                                        <span class="text-sm font-medium text-slate-500 dark:text-gray-400">{{rate3}}</span>                                                
+                                                                    </div>
+                                                                    <div class="w-full">
+                                                                        <div class="w-full h-[5px] relative bg-gray-200 dark:bg-slate-600/30 rounded-full">
+                                                                            <div class="h-[5px] bg-yellow-400 rounded-full" style="width:{{bar_three}}%"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-4">
+                                                                    <div class="flex justify-between">
+                                                                        <span class="font-medium text-sm dark:text-slate-400">2 Star</span>
+                                                                        <span class="text-sm font-medium text-slate-500 dark:text-gray-400">{{rate2}}</span>                                                
+                                                                    </div>
+                                                                    <div class="w-full">
+                                                                        <div class="w-full h-[5px] relative bg-gray-200 dark:bg-slate-600/30 rounded-full">
+                                                                            <div class="h-[5px] bg-yellow-400 rounded-full" style="width:{{bar_two}}%"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-4">
+                                                                    <div class="flex justify-between">
+                                                                        <span class="font-medium text-sm dark:text-slate-400">1 Star</span>
+                                                                        <span class="text-sm font-medium text-slate-500 dark:text-gray-400">{{rate1}}</span>                                                
+                                                                    </div>
+                                                                    <div class="w-full">
+                                                                        <div class="w-full h-[5px] relative bg-gray-200 dark:bg-slate-600/30 rounded-full">
+                                                                            <div class="h-[5px] bg-yellow-400 rounded-full" style="width:{{bar_one}}%"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="sm:col-span-12  md:col-span-6 lg:col-span-6 xl:col-span-6 ">
+                                                              <div class=" w-full relative">
+      
+                                                                <section class="shop-detail-section">
+                                                                  <div class="mb-5 ">
+                                                                    <a href="{% url 'customers-write-review' data.id %}" name="review" class=" px-4 mt-5  me-5  py-2 lg:px-4 bg-brand-500  text-white font-medium">Add Review</a>
+          
+                                                                    </div>
+      
+                                                                  <div class="auto-container">
+                                                                    <div class="comments-area">
+                                                                      <div class="comment-box">
+                                                                        <div class="comment">
+                                                                          
+                                                                         {% for data in review %} 
+                                                                          <div class="author-thumb"></div>
+                                                                          <div class="comment-inner">
+                                                                            {% for datas in userss %}{% if data.user_id.id ==  datas.id %}<div><img style="width: 50px; height: 50px;" src="/static/media/{{datas.img1}}" alt=""></div>{% endif %}{% endfor %}
+                                                                            <div class="comment-info clearfix">{{data.user_id.user_full_name}} – {{data.date}}:</div>
+                                                                            <div class="text">{{data.review}}</div>
+                                                                              <div style="height: 60px; width: 60px;">
+                                                                                <img src="/static/media/{{data.taken_image}}" alt="">
+                                                                              </div>
+                                                                          </div>
+                                                                          {% endfor %}
+                                                                        </div>
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>
+                                                                </section>
+                           
+      
+                                                              </div> <!--end card-->
+                                                          </div><!--end col-->
+                                                        </div> <!--end card-->
+                                                    </div><!--end col--> 
+        
+                                                </div><!--end grid-->
+                                            </div>                      
+
+
+
+                  </div>
+                </div>
+              </div> <!--end card-->
+            </div><!--end col-->
+          </div><!--end grid-->
+
+         
+
+        </div><!--end container-->
+        <!-- footer -->
+
+
+
+      </div><!--end main-->
+    </div><!--end page-wrapper-->
+  </div><!--end div-->
+</div>
+
+
+
+  <!-- JAVASCRIPTS -->
+{% comment %} 
+  <script src="{% static "assets/js/product-details-frostui.js" %}"></script>
+
+  <script src="{% static "assets/js/product-details-image-zoom.js" %}"></script> {% endcomment %}
+  
+  <script>
+
+    var options = {
+      width: 400,
+      height: 400,
+      zoomWidth: 400,
+      offset: { vertical: 0, horizontal: 0 }
+    };
+    new ImageZoom(document.getElementById("img-container"), options);
+    NiceSelect.bind(document.querySelector(".nice-select"));
+  </script>
+  <!-- JAVASCRIPTS -->
+</body>
+
+{% endblock header %}

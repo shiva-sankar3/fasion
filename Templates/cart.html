@@ -1,0 +1,145 @@
+{% extends 'customers-home.html' %}
+{% load static %}
+{% block header %}
+  <link href="{% static 'assets/css/cart-style.css' %}" rel="stylesheet" />
+
+  <!-- SPECIFIC CSS -->
+  <link href="{% static 'assets/css/cart.css' %}" rel="stylesheet" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+
+  <div id="page">
+    <main class="bg_gray">
+      <div class="container margin_30">
+        <!-- /page_header -->{% if count  < 1 %}
+        <div class="emptycart container  ">your cart is empty</div>
+
+        {% else %}
+
+
+        <table class="table table-striped cart-list">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            
+  
+              
+              {% for d in data %}
+              <tr>
+                <td>
+                  <div class="thumb_cart">
+                    <img src="/static/media/{{ d.product_id.product_image }}" data-src="img/products/shoes/1.jpg" class="lazy" alt="Image" />
+                  </div>
+                  <span class="item_cart">({{ d.product_id.product_brand }}) {{ d.product_id.product_name }}</span>
+                </td>
+                <td>
+                  <strong>
+                    <script>
+                      var a=parseInt("{{d.product_id.product_price}}");
+                      var b=parseInt("{{d.product_id.offer_price}}");
+                      var c=a*(1-b/100)
+                      document.write(parseInt(c))
+                    </script>
+                    {{c}}
+                  </strong>
+                </td>
+                <td>
+                  <div class="justify-content-between ">
+                 
+                    
+                    <div ><a class="fs-3 text-danger " href="{% url 'cart-decrement' d.id %}">-</a></div>
+                    <div><input type="text" value="{{ d.order_qty }}" id="quantity_1" class="qty2" name="quantity_1" /></div>
+                    <div ><a class="fs-3 text-danger " href="{% url 'cart-increment' d.id %}">+</a></div>
+                  </div>
+                </td>
+                <td>
+                  <strong>${{ d.cart_amount  }}</strong>
+                </td>
+                
+                <td class="options">
+                  <a class="remove" href="{% url 'customers-cart-remove' d.id %}"><i class="remove"><box-icon  name='trash' color="red" class="bx-tada-hover" ></i></a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <div class="row add_top_30 flex-sm-row-reverse cart_actions justify-content-end ">
+          {% comment %} <div class="col-sm-4 text-end">
+            <button type="submit" class="btn_1 gray">Update Cart</button>
+          </div> {% endcomment %}
+          <div class="col-sm-8">
+            <div class="apply-coupon">
+              <div class="form-group">
+                <div class="row g-2">
+                  <div class="col-md-6">
+                    <input type="text" name="coupon-code" value="" placeholder="Promo code" class="form-control promo-code" />
+                  </div>
+                  <div class="col-md-4">
+                    <button type="submit" class="btn_1 outline">Apply Coupon</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /cart_actions -->
+      </div>
+      <!-- /container -->
+
+      <div class="box_cart">
+        <div class="container">
+          <div class="row justify-content-end">
+            <div class="col-xl-4 col-lg-4 col-md-6">
+              <ul>
+                <li>
+                  <span>Subtotal</span> ${{ free }}
+                </li>
+                <li>
+                  <span>Shipping Charge</span> {% if free > 50 %}
+                    <p style="color: red;">
+                      <strike>$50</strike> Free Shipping
+                    </p>
+                  {% else %}
+                    <p>+$50</p>
+                  {% endif %}
+                </li>
+                <li>
+
+                  <span>Total</span>
+                  {% if free > 50 %}
+                  <p>{{free}}</p>
+                  {% else %}
+                  ${{ free|add:50 }}
+                  {% endif %}
+                  
+                </li>
+              </ul>
+              <a href="{% url 'customers-checkout' %}" class="btn_1 full-width cart">Proceed to Checkout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /box_cart -->
+    </main>
+    <!-- /main -->
+
+    <!-- /footer -->
+  </div>
+  <!-- page -->
+  {% endif %}
+
+  <div id="toTop"></div>
+  <!-- Back to top button -->
+
+  <!-- COMMON SCRIPTS -->
+  <script src="{% static 'assets/js/common_scripts.min.js' %}"></script>
+  <script src="{% static 'assets/js/cart-main.js' %}"></script>
+{% endblock %}

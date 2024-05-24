@@ -1,0 +1,477 @@
+{% extends 'customers-home.html' %}
+{% load static %}
+{% block header %}
+  <body data-layout-mode="light" data-sidebar-size="default" data-theme-layout="vertical" class="bg-[#EEF0FC] dark:bg-gray-900">
+    <div class="ltr:flex flex-1 rtl:flex-row-reverse">
+      <div class="page-wrapper relative duration-300 pt-0 w-full">
+        <div class="xl:w-full min-h-[calc(100vh-0px)] relative pb-0">
+          <div class="container my-4">
+            <div class="grid md:grid-cols-12 lg:grid-cols-12 xl:grid-cols-12 gap-4 mb-4">
+              <div class="sm:col-span-12 md:col-span-12 lg:col-span-4 xl:col-span-4">
+                <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-slate-700/40 rounded-md w-full relative">
+                  <div class="border-b border-slate-200 dark:border-slate-700/40 py-3 px-4 dark:text-slate-300/70">
+                    <div class="flex-none md:flex">
+                      <h4 class="font-medium flex-1 self-center mb-2 md:mb-0">Order Summary</h4>
+                    </div>
+                  </div>
+                  <!-- end header-title -->
+                  <div class="flex flex-col">
+                    <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                      <div class="inline-block py-2 min-w-full sm:px-6 lg:px-8">
+                        <div class="overflow-hidden">
+                          <table class="min-w-full">
+                            <thead class="bg-slate-100 dark:bg-slate-700/20">
+                              <tr>
+                                <th scope="col" class="p-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">Products</th>
+                                <th scope="col" class="p-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">Quantity</th>
+                                <th scope="col" class="p-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">Total</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <!-- Product 1 -->
+                              {% for s in data %}
+                                <tr class="bg-white border-b border-dashed dark:bg-gray-900 dark:border-gray-700/40">
+                                  <td class="p-3 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-slate-300">
+                                    <img src="/static/media/{{ s.product_id.product_image }}" alt="" class="mr-2 h-8 inline-block" />
+                                    <h5 class="text-wrap  text-sm font-semibold text-slate-700 dark:text-gray-400 inline-block">{{ s.product_id.product_name }}</h5>
+                                  </td>
+                                  <td class="p-3 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">{{ s.order_qty }}</td>
+                                  <td class="p-3 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">$ {{ s.cart_amount }}</td>
+                                </tr>
+                              {% endfor %}
+
+                              <tr class="bg-white dark:bg-gray-900">
+                                <td class="p-3 text-base font-semibold text-gray-900 whitespace-nowrap dark:text-slate-300">Total</td>
+                                <td class="p-3 text-base font-semibold text-gray-900 whitespace-nowrap dark:text-slate-300"></td>
+                                <td class="p-3 text-base font-semibold text-gray-900 whitespace-nowrap dark:text-slate-300">${{ total }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> <!-- end card -->
+                <div class="bg-black dark:bg-slate-800/30 shadow rounded-md relative w-full mt-4">
+                  <div class="flex-auto p-4">
+                    <div class="grid grid-cols-1 rounded-md">
+                      <div class="sm:-mx-6 lg:-mx-8">
+                        <div class="relative overflow-x-auto block w-full sm:px-6 lg:px-8">
+                          <table class="min-w-full">
+                            <tbody>
+                              <!-- 1 -->
+                              <tr class="border-b border-dashed border-slate-500/60 dark:border-slate-700/40">
+                                <td class="p-3 text-sm text-gray-300 whitespace-nowrap font-medium">Subtotal</td>
+                                <td class="p-3 text-sm font-medium text-gray-400 whitespace-nowrap">${{ total }}</td>
+                              </tr>
+                              <!-- 2 -->
+                              <tr class="border-b border-dashed border-slate-500/60 dark:border-slate-700/40">
+                                <td class="p-3 text-sm text-gray-300 whitespace-nowrap font-medium">Shipping Charge</td>
+                                <td class="p-3 text-sm font-medium text-gray-400 whitespace-nowrap">
+                                  {% if total > 50 %}
+                                    <p style="color: red;">
+                                      <strike>$50</strike> Free Shipping
+                                    </p>
+                                  {% else %}
+                                    <p>+ $50</p>
+                                  {% endif %}
+                                </td>
+                              </tr>
+                              <!-- 3 -->
+                              {% comment %} <tr class="">
+                                <td class="p-3 text-sm text-gray-300 whitespace-nowrap font-medium">Promo Code</td>
+                                <td class="p-3 text-sm font-medium text-gray-400 whitespace-nowrap">-$10.00</td>
+                              </tr> {% endcomment %}
+                              <!-- 4 -->
+                              <tr class="border-t-2 border-solid border-slate-500/60 dark:border-slate-700/40">
+                                <td class="p-3 text-base text-gray-200 whitespace-nowrap font-medium">Total</td>
+                                <td class="p-3 text-base font-medium text-gray-100 whitespace-nowrap">${{ free }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="flex gap-4 mb-4">
+                        <a href="{% url 'customers-products' %}" class="text-center py-2 lg:px-4 bg-brand-500 collapse:bg-green-100 text-white text-sm font-semibold rounded hover:bg-brand-600 hover:text-white w-1/2 mt-4 lg:mb-0 inline-block">Continue shopping</a>
+                        <a href="{% url 'customers-cart' %}" class="text-center py-2 lg:px-4 bg-brand-500 collapse:bg-green-100 text-white text-sm font-semibold rounded hover:bg-brand-600 hover:text-white w-1/2 mt-4 lg:mb-0 inline-block">Go to cart</a>
+                      </div>
+                      <p class="text-[11px] text-slate-400">
+                        <span class="text-slate-200">Note :</span> It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                      </p>
+                    </div>
+                  </div>
+                  <!-- end card-body -->
+                </div>
+              </div>
+              <!-- end col -->
+
+              <div class="sm:col-span-12 md:col-span-12 lg:col-span-8 xl:col-span-8">
+                <form action="" method="post">
+                  {% csrf_token %}
+                  {% if saved %}
+
+                  <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-slate-700/40 rounded-md w-full relative mb-4">
+                    <div class="border-b border-slate-200 dark:border-slate-700/40 py-3 px-4 dark:text-slate-300/70">
+                      <h4 class="font-medium">Delivery Address</h4>
+                    </div>
+                    <!-- end header-title -->
+                    <div class="flex-auto p-4">
+                      <div class="grid grid-cols-4 gap-4">
+                        <div class="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2">
+                          <div class="mb-2">
+                            <label for="First_Name" class="font-medium text-sm text-slate-600 dark:text-slate-400">First Name<small class="text-red-600 text-sm">*</small></label>
+
+                            <input name="fname" value="{{saved.f_name}}" required class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="First name" type="text" />
+                          </div>
+                        </div>
+                        <div class="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2">
+                          <div class="mb-2">
+                            <label for="Last_name" class="font-medium text-sm text-slate-600 dark:text-slate-400">Last Name<small class="text-red-600 text-sm">*</small></label>
+                            <input name="lname" value="{{saved.l_name}}" required class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="Last name" type="text" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-4 gap-4">
+                        <div class="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2">
+                          <div class="mb-2">
+                            <label for="Delivery_Address" required class="font-medium text-sm text-slate-600 dark:text-slate-400">Delivery Address<small class="text-red-600 text-sm">*</small></label>
+                            <input name="Delivery_Address" value="{{saved.d_address}}"  class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="Address" type="text" />
+                          </div>
+                        </div>
+                        <div class="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2">
+                          <div class="mb-2">
+                            <label for="Address" class="font-medium text-sm text-slate-600 dark:text-slate-400">Address</label>
+                            <input name="Address" value="{{saved.h_address}}"  class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="Address" type="text" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-3 gap-4">
+                        <div class="col-span-4 md:col-span-2 lg:col-span-1 xl:col-span-1">
+                          <div class="mb-2">
+                            <label for="City" class="font-medium text-sm text-slate-600 dark:text-slate-400">City<small class="text-red-600 text-sm">*</small></label>
+                            <select id="City"  value="{{saved.city}}"    name="City" class="w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-[6.5px] focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700">
+                              <option class="dark:text-slate-700">Kochi</option>
+                              <option class="dark:text-slate-700">Kovalam</option>
+                              <option class="dark:text-slate-700">Thiruvananthapuram</option>
+                              <option class="dark:text-slate-700">Kovalam</option>
+                              <option class="dark:text-slate-700">Kumarakom</option>
+                              <option class="dark:text-slate-700">Munnar</option>
+                              <option class="dark:text-slate-700">Thekkady</option>
+                              <option class="dark:text-slate-700">Alleppey</option>
+                              <option class="dark:text-slate-700">Periyar</option>
+                              <option class="dark:text-slate-700">Idukki</option>
+                              <option class="dark:text-slate-700">Kozhikode</option>
+                              <option class="dark:text-slate-700">Thrissur</option>
+                              <option class="dark:text-slate-700">Sabrimala</option>
+                              <option class="dark:text-slate-700">Palakkad</option>
+                              <option class="dark:text-slate-700">Varkala</option>
+                              <option class="dark:text-slate-700">Wayanad</option>
+                              <option class="dark:text-slate-700">Aranmula</option>
+                              <option class="dark:text-slate-700">Bhoothathankettu</option>
+                              <option class="dark:text-slate-700">Bekal</option>
+                              <option class="dark:text-slate-700">Chennamangalam</option>
+                              <option class="dark:text-slate-700">Anakkayam</option>
+                       
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-span-4 md:col-span-2 lg:col-span-1 xl:col-span-1">
+                          <div class="mb-2">
+                            <label for="State" class="font-medium text-sm text-slate-600 dark:text-slate-400">State<small class="text-red-600 text-sm">*</small></label>
+                            <select id="State"  value="{{saved.state}}"   name="State" class="w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-[6.5px] focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700">
+                              <option class="dark:text-slate-700">Kerala</option>
+                              <option disabled class="dark:text-slate-700">Sorry currently only Available for Kerala</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-span-4 md:col-span-2 lg:col-span-1 xl:col-span-1">
+                          <div class="mb-2">
+                            <label for="Country" class="font-medium text-sm text-slate-600 dark:text-slate-400">Country<small class="text-red-600 text-sm">*</small></label>
+                            <select id="Country"  value="{{saved.country}}"   name="Country" class="w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-[6.5px] focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700">
+                              <option class="dark:text-slate-700">India</option>
+                              <option disabled class="dark:text-slate-700">Sorry currently only Available for India</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-4 gap-4">
+                        <div class="col-span-4 md:col-span-2 lg:col-span-1 xl:col-span-1">
+                          <div class="mb-2">
+                            <label for="Zip_code" class="font-medium text-sm text-slate-600 dark:text-slate-400">Zip code<small class="text-red-600 text-sm">*</small></label>
+                            <input name="Zip_code" value="{{saved.zip_code}}"  required maxlength="6" class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="------" type="text" />
+                          </div>
+                        </div>
+                        <div class="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2">
+                          <div class="mb-2">
+                            <label for="Email_Address" class="font-medium text-sm text-slate-600 dark:text-slate-400">Email Address</label>
+                            <input name="Email_Address" value="{{saved.e_mail}}"  class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="Enter Email" type="text" />
+                          </div>
+                        </div>
+                        <div class="col-span-4 md:col-span-2 lg:col-span-1 xl:col-span-1">
+                          <div class="mb-2">
+                            <label for="Mobile_No" class="font-medium text-sm text-slate-600 dark:text-slate-400">Mobile No<small class="text-red-600 text-sm">*</small></label>
+                            <input name="Mobile_No" value="{{saved.mobile}}"  type="text" required  pattern="[6789][0-9]{9}" class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="Mobile no" type="text" />
+                          </div>
+                        </div>
+                      </div>
+                      <label class="flex">
+                        <input type="checkbox" class="accent-brand-500" />
+                        <span for="default-checkbox" class="ms-1 text-sm font-medium text-slate-600 dark:text-gray-300">Confirm Shipping Address</span>
+                      </label>
+                      <div class="mt-3">
+                        <button type="submit" name="saveaddress" class="inline-block focus:outline-none text-white hover:bg-brand-500 hover:text-white bg-brand-500 border border-gray-200 text-sm font-medium py-1 px-3 rounded">Save</button>
+              
+                        <a class="btn btn-primary inline-block focus:outline-none text-red-500 hover:bg-red-500 hover:text-white bg-transparent border border-gray-200 text-sm font-medium py-1 px-3 rounded " href="{{ request.get_full_path }}">Reload</a>
+                      </div>
+                    </div>
+                    <!-- end card-body -->
+                  </div> <!-- end card -->
+
+
+
+
+
+
+                  {% else %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  <div class="bg-white dark:bg-gray-900 border border-slate-200 dark:border-slate-700/40 rounded-md w-full relative mb-4">
+                    <div class="border-b border-slate-200 dark:border-slate-700/40 py-3 px-4 dark:text-slate-300/70">
+                      <h4 class="font-medium">Delivery Address</h4>
+                    </div>
+                    <!-- end header-title -->
+                    <div class="flex-auto p-4">
+                      <div class="grid grid-cols-4 gap-4">
+                        <div class="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2">
+                          <div class="mb-2">
+                            <label for="First_Name" class="font-medium text-sm text-slate-600 dark:text-slate-400">First Name<small class="text-red-600 text-sm">*</small></label>
+
+                            <input name="fname" value="" required class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="First name" type="text" />
+                          </div>
+                        </div>
+                        <div class="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2">
+                          <div class="mb-2">
+                            <label for="Last_name" class="font-medium text-sm text-slate-600 dark:text-slate-400">Last Name<small class="text-red-600 text-sm">*</small></label>
+                            <input name="lname" value="{{saved.l_name}}" required class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="Last name" type="text" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-4 gap-4">
+                        <div class="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2">
+                          <div class="mb-2">
+                            <label for="Delivery_Address" required class="font-medium text-sm text-slate-600 dark:text-slate-400">Delivery Address<small class="text-red-600 text-sm">*</small></label>
+                            <input name="Delivery_Address" class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="Address" type="text" />
+                          </div>
+                        </div>
+                        <div class="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2">
+                          <div class="mb-2">
+                            <label for="Address" class="font-medium text-sm text-slate-600 dark:text-slate-400">Address</label>
+                            <input name="Address" class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="Address" type="text" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-3 gap-4">
+                        <div class="col-span-4 md:col-span-2 lg:col-span-1 xl:col-span-1">
+                          <div class="mb-2">
+                            <label for="City" class="font-medium text-sm text-slate-600 dark:text-slate-400">City<small class="text-red-600 text-sm">*</small></label>
+                            <select id="City" name="City" class="w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-[6.5px] focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700">
+                              <option class="dark:text-slate-700">Kochi</option>
+                              <option class="dark:text-slate-700">Kovalam</option>
+                              <option class="dark:text-slate-700">Thiruvananthapuram</option>
+                              <option class="dark:text-slate-700">Kovalam</option>
+                              <option class="dark:text-slate-700">Kumarakom</option>
+                              <option class="dark:text-slate-700">Munnar</option>
+                              <option class="dark:text-slate-700">Thekkady</option>
+                              <option class="dark:text-slate-700">Alleppey</option>
+                              <option class="dark:text-slate-700">Periyar</option>
+                              <option class="dark:text-slate-700">Idukki</option>
+                              <option class="dark:text-slate-700">Kozhikode</option>
+                              <option class="dark:text-slate-700">Thrissur</option>
+                              <option class="dark:text-slate-700">Sabrimala</option>
+                              <option class="dark:text-slate-700">Palakkad</option>
+                              <option class="dark:text-slate-700">Varkala</option>
+                              <option class="dark:text-slate-700">Wayanad</option>
+                              <option class="dark:text-slate-700">Aranmula</option>
+                              <option class="dark:text-slate-700">Bhoothathankettu</option>
+                              <option class="dark:text-slate-700">Bekal</option>
+                              <option class="dark:text-slate-700">Chennamangalam</option>
+                              <option class="dark:text-slate-700">Anakkayam</option>
+                       
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-span-4 md:col-span-2 lg:col-span-1 xl:col-span-1">
+                          <div class="mb-2">
+                            <label for="State" class="font-medium text-sm text-slate-600 dark:text-slate-400">State<small class="text-red-600 text-sm">*</small></label>
+                            <select id="State" name="State" class="w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-[6.5px] focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700">
+                              <option class="dark:text-slate-700">Kerala</option>
+                              <option disabled class="dark:text-slate-700">Sorry currently only Available for Kerala</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-span-4 md:col-span-2 lg:col-span-1 xl:col-span-1">
+                          <div class="mb-2">
+                            <label for="Country" class="font-medium text-sm text-slate-600 dark:text-slate-400">Country<small class="text-red-600 text-sm">*</small></label>
+                            <select id="Country" name="Country" class="w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-[6.5px] focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700">
+                              <option class="dark:text-slate-700">India</option>
+                              <option disabled class="dark:text-slate-700">Sorry currently only Available for India</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-4 gap-4">
+                        <div class="col-span-4 md:col-span-2 lg:col-span-1 xl:col-span-1">
+                          <div class="mb-2">
+                            <label for="Zip_code" class="font-medium text-sm text-slate-600 dark:text-slate-400">Zip code<small class="text-red-600 text-sm">*</small></label>
+                            <input name="Zip_code" required maxlength="6" class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="------" type="text" />
+                          </div>
+                        </div>
+                        <div class="col-span-4 md:col-span-2 lg:col-span-2 xl:col-span-2">
+                          <div class="mb-2">
+                            <label for="Email_Address" class="font-medium text-sm text-slate-600 dark:text-slate-400">Email Address</label>
+                            <input name="Email_Address" class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="Enter Email" type="text" />
+                          </div>
+                        </div>
+                        <div class="col-span-4 md:col-span-2 lg:col-span-1 xl:col-span-1">
+                          <div class="mb-2">
+                            <label for="Mobile_No" class="font-medium text-sm text-slate-600 dark:text-slate-400">Mobile No<small class="text-red-600 text-sm">*</small></label>
+                            <input name="Mobile_No" type="text" required  pattern="[6789][0-9]{9}" class="form-input w-full rounded-md mt-1 border border-slate-300/60 dark:border-slate-700 dark:text-slate-300 bg-transparent px-3 py-2 focus:outline-none focus:ring-0 placeholder:text-slate-400/70 placeholder:font-normal placeholder:text-sm hover:border-slate-400 focus:border-brand-500 dark:focus:border-brand-500 dark:hover:border-slate-700" placeholder="Mobile no" type="text" />
+                          </div>
+                        </div>
+                      </div>
+                      <label class="flex">
+                        <input type="checkbox" class="accent-brand-500" />
+                        <span for="default-checkbox" class="ms-1 text-sm font-medium text-slate-600 dark:text-gray-300">Confirm Shipping Address</span>
+                      </label>
+                      <div class="mt-3">
+                        <button type="submit" name="saveaddress" class="inline-block focus:outline-none text-white hover:bg-brand-500 hover:text-white bg-brand-500 border border-gray-200 text-sm font-medium py-1 px-3 rounded">Save</button>
+              
+                        <a class="btn btn-primary inline-block focus:outline-none text-red-500 hover:bg-red-500 hover:text-white bg-transparent border border-gray-200 text-sm font-medium py-1 px-3 rounded " href="{{ request.get_full_path }}">Reload</a>
+                      </div>
+                    </div>
+                    <!-- end card-body -->
+                  </div> <!-- end card -->
+                  {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  <div class="md:grid-cols-12 lg:grid-cols-12 xl:grid-cols-12 gap-4 mb-4">
+                    <div class="accordion" id="accordionExample">
+                      <p class="text">
+                        <i class="bi bi-arrow-right-short"></i> Payment Method
+                      </p>
+                      <div class="accordion-item bg-light">
+                        <h5 class="accordion-header" id="headingOne">
+                          <button class="accordion-button border-0 bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <input type="radio" name="radioNoLabel" id="radioNoLabel1" />
+
+                            <img src="https://static-assets-web.flixcart.com/fk-p-linchpin-web/batman-returns/logos/UPI.gif" class="rounded" style="width: 30px; height: 30px; margin-left: 10px;" />
+                            <span>UPI</span>
+                          </button>
+                        </h5>
+
+                        <div id="collapseOne" class="accordion-collapse collapse show" style="padding-left: 20px;" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                          <p>enter your UPI ID</p>
+                          <div class="form-floating mb-3 me-4">
+                            <input type="text" class="form-control" id="floatingInput" placeholder="UPI ID HERE" />
+                            <label style="font-size: x-small; " for="floatingInput">UPI ID HERE</label>
+                            <a href="">verify your UPI ID</a>
+                          </div>
+
+                          <div class="d-grid mt-3 me-4">
+                            <button name="paybtn"  type="submit" class="btn btn-primary my-3 ms-3" style="width:95%;background-color: #6930e3;">Place Order</button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="accordion-item mt-3">
+                        <h5 class="accordion-header" id="headingTwo">
+                          <button class="accordion-button collapsed border-0 bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <input type="radio" name="radioNoLabel" id="radioNoLabel1" />
+                            <span style="margin-left: 10px;">Credit / Debit / ATM Card</span>
+                          </button>
+                        </h5>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                          <div class="card-details" style="padding-left: 20px;">
+                            <form class="checkout-form">
+                              <div class="form-group">
+                                <label for="card-number">Card Number <span class="required">*</span></label>
+                                <input id="card-number" class="form-control" type="tel" placeholder="•••• •••• •••• ••••" />
+                              </div>
+                              <div class="form-group half-width padding-right">
+                                <label for="card-expiry">Expiry (MM/YY) <span class="required">*</span></label>
+                                <input id="card-expiry" class="form-control" type="tel" placeholder="MM / YY" />
+                              </div>
+                              <div class="form-group half-width padding-left">
+                                <label for="card-cvc">Card Code <span class="required">*</span></label>
+                                <input id="card-cvc" class="form-control" type="tel" maxlength="4" placeholder="CVC" />
+                              </div>
+                              <button name="paybtn" class="btn btn-primary my-3 ms-1 " type="submit" style="width:95%;background-color: #6930e3;">Place Order</button>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="accordion-item mt-3">
+                        <h5 class="accordion-header" id="headingThree">
+                          <button class="accordion-button collapsed border-0 bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            <input type="radio" name="radioNoLabel" id="radioNoLabel1" />
+                            <span style="margin-left: 10px;">Cash On Delivery</span>
+                          </button>
+                        </h5>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                          <div class="ms-4" style="padding-left: 20px;">
+                            <p class="mt-2">
+                              <i class="bi bi-box-seam-fill"></i> You Selected Cash ON DElivery For YOur Order...
+                            </p>
+                            <button name="paybtn" type="submit" class="btn btn-primary my-3" style="width:95%;background-color: #6930e3;" >Place Order</button> 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end inner-grid -->
+                </form>
+              </div>
+              <!-- end col -->
+            </div>
+            <!-- end inner-grid -->
+          </div>
+          
+          <!-- end container -->
+          <!-- footer -->
+        </div>
+        <!-- end main -->
+      </div>
+      <!-- end page-wrapper -->
+    </div>
+    <!-- end div -->
+  </body>
+{% endblock %}
