@@ -238,7 +238,7 @@ def customershomecontent(request):
 
     }
 
-    return render(request,'customers-home-content.html',context)
+    return render(request,'index.html',context)
 
 def contacts(request):
     user=""
